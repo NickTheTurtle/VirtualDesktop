@@ -1,0 +1,10 @@
+#currentApp {
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#menuToggler {
+  margin-right: 17px;
+}

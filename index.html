@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Virtual Desktop</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet">
+  <link href="css/vuetify.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div id="app">
+    <v-app>
+      <v-navigation-drawer stateless hide-overlay :mini-variant.sync="mini" v-model="drawer" fixed clipped app right>
+        <v-list class="pt-0" dense>
+          <v-list-tile v-for="application in applications" @click="" @click.native.stop="mini=true">
+            <v-list-tile-action>
+              <v-icon large>{{application.icon}}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>{{application.name}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
+      <v-toolbar color="primary" dark fixed clipped-right app>
+        <v-toolbar-title class="pr-4" id="currentApp">{{currentApp}}</v-toolbar-title>
+        <v-toolbar-items>
+        <v-menu offset-y="true" v-for="menu in _.find(applications, (a) => a.name === currentApp).menubar">
+          <v-btn flat slot="activator">
+            {{menu.name}}
+          </v-btn>
+          <v-list>
+            <template v-for="item in menu.menu">
+                <v-list-tile @click="item.action" v-if="!item.divider">{{item.name}}</v-list-tile>
+                <v-divider v-else></v-divider>
+              </template>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
+        <v-spacer></v-spacer>
+        <v-btn id="menuToggler" @click.native.stop="mini = !mini" large icon>
+          <v-icon large>menu</v-icon>
+        </v-btn>
+      </v-toolbar>
+    </v-app>
+  </div>
+
+  <script src="js/vue.min.js"></script>
+  <script src="js/vuetify.min.js"></script>
+  <script src="js/lodash.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
