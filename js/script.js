@@ -44,10 +44,14 @@ new Vue({
       }
     },
     startResize(index) {
-      this.resizeWindowIndex = index;
+      if (isNaN(this.dragWindowIndex)) {
+        this.resizeWindowIndex = index;
+      }
     },
-    stopResize() {
+    stopResizeDrag() {
       this.resizeWindowIndex = NaN;
+      this.dragWindowIndex = NaN;
+      this.dragInitialCoord = [NaN, NaN];
     },
     resizingDraggingWindow(event) {
       let winResize = _.find(this.windows, (a) => a.index === this.resizeWindowIndex);
@@ -59,13 +63,11 @@ new Vue({
       }
     },
     startDrag(index, event) {
-      let win = _.find(this.windows, (a) => a.index === index);
-      this.dragWindowIndex = index;
-      this.dragInitialCoord = [event.clientX - win.position[0], event.clientY - win.position[1]];
-    },
-    stopDrag() {
-      this.dragWindowIndex = NaN;
-      this.dragInitialCoord = [NaN, NaN];
+      if (isNaN(this.resizeWindowIndex)) {
+        let win = _.find(this.windows, (a) => a.index === index);
+        this.dragWindowIndex = index;
+        this.dragInitialCoord = [event.clientX - win.position[0], event.clientY - win.position[1]];
+      }
     }
   },
   mounted() {
