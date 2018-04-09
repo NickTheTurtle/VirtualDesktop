@@ -55,7 +55,7 @@ new Vue({
       if (!isNaN(this.resizeWindowIndex)) {
         winResize.size = [event.clientX - winResize.position[0] + $(`#windows-${this.resizeWindowIndex}-resize`).width() / 2, event.clientY - winResize.position[1] - $("#menubar").height() + $(`#windows-${this.resizeWindowIndex}-resize`).height() / 2]
       } else if (!isNaN(this.dragWindowIndex)) {
-        winDrag.position = [event.clientX - this.dragInitialCoord[0], Math.max(event.clientY - this.dragInitialCoord[1], 0)];
+        winDrag.position = [Math.min(event.clientX - this.dragInitialCoord[0], this.maxSize[0] - winDrag.size[0]), Math.max(event.clientY - this.dragInitialCoord[1], 0)];
       }
     },
     startDrag(index, event) {

@@ -25,7 +25,7 @@
           </v-list-tile>
         </v-list>
       </v-navigation-drawer>
-      <v-toolbar id="menubar" color="secondary" dark fixed clipped-right app @mouseup="stopDrag">
+      <v-toolbar id="menubar" color="secondary" dark fixed clipped-right app @mouseenter="stopDrag">
         <v-toolbar-title class="pr-4" id="currentApp">{{currentApp}}</v-toolbar-title>
         <v-toolbar-items>
           <v-menu offset-y="true" v-for="menu in _.find(applications, (a) => a.name === currentApp).menubar">
