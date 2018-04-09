@@ -7,6 +7,10 @@ vue-draggable-resizable {
   min-height: 100px;
 }
 
+.system-bar {
+  cursor: move;
+}
+
 .resize-icon {
   -ms-user-select: none;
   -moz-user-select: none;

@@ -15,10 +15,10 @@ let data = {
   applications,
   windows,
   maxSize: [0, 0],
-  resizeWindowIndex: NaN
+  resizeWindowIndex: NaN,
+  dragWindowIndex: NaN,
+  dragInitialCoord: [NaN, NaN]
 };
-
-let initial = true;
 
 new Vue({
   el: '#app',
@@ -49,13 +49,23 @@ new Vue({
     stopResize() {
       this.resizeWindowIndex = NaN;
     },
-    resizingWindow(event) {
-      let win = _.find(this.windows, (a) => a.index === this.resizeWindowIndex);
+    resizingDraggingWindow(event) {
+      let winResize = _.find(this.windows, (a) => a.index === this.resizeWindowIndex);
+      let winDrag = _.find(this.windows, (a) => a.index === this.dragWindowIndex);
       if (!isNaN(this.resizeWindowIndex)) {
-        $(`#windows-${this.resizeWindowIndex}`).width(event.clientX - win.position[0] + $(`#windows-${this.resizeWindowIndex}-resize`).width() / 2).height(event.clientY - win.position[1] - $("#menubar").height() + $(`#windows-${this.resizeWindowIndex}-resize`).height() / 2);
-        win.size[0] = event.clientX - win.position[0] + $(`#windows-${this.resizeWindowIndex}-resize`).width() / 2;
-        win.size[1] = event.clientY - win.position[1] - $("#menubar").height() + $(`#windows-${this.resizeWindowIndex}-resize`).height() / 2;
+        winResize.size = [event.clientX - winResize.position[0] + $(`#windows-${this.resizeWindowIndex}-resize`).width() / 2, event.clientY - winResize.position[1] - $("#menubar").height() + $(`#windows-${this.resizeWindowIndex}-resize`).height() / 2]
+      } else if (!isNaN(this.dragWindowIndex)) {
+        winDrag.position = [event.clientX - this.dragInitialCoord[0], Math.max(event.clientY - this.dragInitialCoord[1], 0)];
       }
+    },
+    startDrag(index, event) {
+      let win = _.find(this.windows, (a) => a.index === index);
+      this.dragWindowIndex = index;
+      this.dragInitialCoord = [event.clientX - win.position[0], event.clientY - win.position[1]];
+    },
+    stopDrag() {
+      this.dragWindowIndex = NaN;
+      this.dragInitialCoord = [NaN, NaN];
     }
   },
   mounted() {
