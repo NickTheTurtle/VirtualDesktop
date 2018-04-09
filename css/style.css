@@ -1,3 +1,24 @@
+vue-draggable-resizable {
+  position: relative;
+}
+
+.windows {
+  min-width: 200px;
+  min-height: 100px;
+}
+
+.resize-icon {
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: se-resize;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  overflow: scroll;
+}
+
 #currentApp {
   -ms-user-select: none;
   -moz-user-select: none;
@@ -7,4 +28,8 @@
 
 #menuToggler {
   margin-right: 17px;
+}
+
+#container {
+  padding: 0px;
 }
