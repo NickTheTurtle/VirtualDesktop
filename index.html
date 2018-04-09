@@ -13,18 +13,20 @@
 <body>
   <div id="app" @mousemove="resizingDraggingWindow">
     <v-app>
-      <v-navigation-drawer id="drawer" stateless hide-overlay :mini-variant.sync="mini" v-model="drawer" fixed clipped app right>
-        <v-list class="pt-0" dense>
-          <v-list-tile v-for="application in applications" @click="switchApp(application.name)" @click.native.stop="mini=true">
-            <v-list-tile-action>
-              <v-icon large :title="application.name">{{application.icon}}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{application.name}}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-navigation-drawer>
+      <div @mouseenter="stopDrag">
+        <v-navigation-drawer id="drawer" stateless hide-overlay :mini-variant.sync="mini" v-model="drawer" fixed clipped app right>
+          <v-list class="pt-0" dense>
+            <v-list-tile v-for="application in applications" @click="switchApp(application.name)" @click.native.stop="mini=true">
+              <v-list-tile-action>
+                <v-icon large :title="application.name">{{application.icon}}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>{{application.name}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-navigation-drawer>
+      </div>
       <v-toolbar id="menubar" color="secondary" dark fixed clipped-right app @mouseenter="stopDrag">
         <v-toolbar-title class="pr-4" id="currentApp">{{currentApp}}</v-toolbar-title>
         <v-toolbar-items>
