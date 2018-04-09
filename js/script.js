@@ -20,6 +20,8 @@ let data = {
   dragInitialCoord: [NaN, NaN]
 };
 
+let dragResizeWindow;
+
 new Vue({
   el: '#app',
   data,
@@ -46,6 +48,7 @@ new Vue({
     startResize(index) {
       if (isNaN(this.dragWindowIndex)) {
         this.resizeWindowIndex = index;
+        dragResizeWindow = _.find(this.windows, (a) => a.index === index);
       }
     },
     stopResizeDrag() {
@@ -54,12 +57,11 @@ new Vue({
       this.dragInitialCoord = [NaN, NaN];
     },
     resizingDraggingWindow(event) {
-      let winResize = _.find(this.windows, (a) => a.index === this.resizeWindowIndex);
-      let winDrag = _.find(this.windows, (a) => a.index === this.dragWindowIndex);
       if (!isNaN(this.resizeWindowIndex)) {
-        winResize.size = [event.clientX - winResize.position[0] + $(`#windows-${this.resizeWindowIndex}-resize`).width() / 2, event.clientY - winResize.position[1] - $("#menubar").height() + $(`#windows-${this.resizeWindowIndex}-resize`).height() / 2]
+        dragResizeWindow.size = [Math.min(event.clientX - dragResizeWindow.position[0] + $(`#windows-${this.resizeWindowIndex}-resize`).width() / 2, this.maxSize[0] - dragResizeWindow.position[0]), event.clientY - dragResizeWindow.position[1] - $("#menubar").height() + $(`#windows-${this.resizeWindowIndex}-resize`).height() / 2]
       } else if (!isNaN(this.dragWindowIndex)) {
-        winDrag.position = [Math.min(event.clientX - this.dragInitialCoord[0], this.maxSize[0] - winDrag.size[0]), Math.max(event.clientY - this.dragInitialCoord[1], 0)];
+        let winDrag = _.find(this.windows, (a) => a.index === this.dragWindowIndex);
+        dragResizeWindow.position = [Math.min(event.clientX - this.dragInitialCoord[0], this.maxSize[0] - dragResizeWindow.size[0]), Math.max(event.clientY - this.dragInitialCoord[1], 0)];
       }
     },
     startDrag(index, event) {
@@ -67,6 +69,7 @@ new Vue({
         let win = _.find(this.windows, (a) => a.index === index);
         this.dragWindowIndex = index;
         this.dragInitialCoord = [event.clientX - win.position[0], event.clientY - win.position[1]];
+        dragResizeWindow = _.find(this.windows, (a) => a.index === index);
       }
     }
   },
