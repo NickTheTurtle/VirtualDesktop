@@ -51,7 +51,9 @@
               :key="`windows-${win.index}`">
               <div @mousedown="startDrag(win.index, $event)">
                 <v-system-bar class="system-bar" :id="`windows-${win.index}-drag`" :color="_.find(applications, (a) => a.name === win.application).color">
-                  {{win.application}}: {{win.title}}
+                  <v-toolbar-title>
+                    {{win.application}}<span v-if="win.title">: {{win.title}}</span>
+                  </v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-btn small flat icon>
                     <v-icon>remove</v-icon>
