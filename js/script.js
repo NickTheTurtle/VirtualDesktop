@@ -51,7 +51,9 @@ new Vue({
       let maxIndex = _.maxBy(this.windows, (a) => a.index).index;
       if (index !== maxIndex) {
         _.find(this.windows, (a) => a.index === index).index = maxIndex + 1;
+        return maxIndex + 1;
       }
+      return index;
     },
     resizeContent() {
       let content = $("#content > div");
@@ -64,6 +66,7 @@ new Vue({
       }
     },
     startResize(index) {
+      index = this.switchWindow(index);
       if (isNaN(this.dragWindowIndex)) {
         this.resizeWindowIndex = index;
         dragResizeWindow = _.find(this.windows, (a) => a.index === index);
@@ -75,6 +78,7 @@ new Vue({
       this.dragInitialCoord = [NaN, NaN];
     },
     resizingDraggingWindow(event) {
+      window.getSelection().removeAllRanges();
       if (!isNaN(this.resizeWindowIndex)) {
         dragResizeWindow.size = [Math.min(event.clientX - dragResizeWindow.position[0] + $(`#windows-${this.resizeWindowIndex}-resize`).width() / 2, this.maxSize[0] - dragResizeWindow.position[0]), event.clientY - dragResizeWindow.position[1] - $("#menubar").height() + $(`#windows-${this.resizeWindowIndex}-resize`).height() / 2]
       } else if (!isNaN(this.dragWindowIndex)) {
@@ -82,6 +86,7 @@ new Vue({
       }
     },
     startDrag(index, event) {
+      index = this.switchWindow(index);
       if (isNaN(this.resizeWindowIndex)) {
         let win = _.find(this.windows, (a) => a.index === index);
         this.dragWindowIndex = index;
