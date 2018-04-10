@@ -36,21 +36,26 @@ new Vue({
         for (let i = 0; i < windows.length; i++) {
           windows[i].index += maxIndex - minIndex + 1;
         }
+        return maxIndex - minIndex + 1;
       } else {
+        let index = _.maxBy(this.windows, (a) => a.index).index + 1;
         this.windows.push({
-          index: _.maxBy(this.windows, (a) => a.index).index + 1,
+          index,
           minimized: false,
           application: app,
           position: [0, 0],
           size: [...this.maxSize],
           title: ""
         });
+        return index;
       }
     },
     switchWindow(index) {
       let maxIndex = _.maxBy(this.windows, (a) => a.index).index;
+      let win = _.find(this.windows, (a) => a.index === index);
       if (index !== maxIndex) {
-        _.find(this.windows, (a) => a.index === index).index = maxIndex + 1;
+        win.index = maxIndex + 1;
+        this.currentApp = win.application;
         return maxIndex + 1;
       }
       return index;
