@@ -48,11 +48,11 @@
       </v-toolbar>
       <v-content id="content">
         <v-container id="container" fluid v-resize="resizeContent">
-          <div :class="i > 0 || win.application !== currentApp ? 'inactive-window' : ''" v-for="(win, i) in _.sortBy(_.filter(windows, (a) => !a.minimized), (a) => -a.index)" @click="switchWindow(win.index)">
+          <div :style="{zIndex: win.index}" v-for="(win, i) in _.sortBy(_.filter(windows, (a) => !a.minimized), (a) => a.index)" @click="switchWindow(win.index)">
             <v-card class="windows" :id="`windows-${win.index}`" :width="win.size[0]" :height="win.size[1]" :style="{left: win.position[0] + 'px', top: win.position[1] + $('#menubar').height() + 'px', maxWidth: maxSize[0] + 'px', maxHeight: maxSize[1] + 'px', zIndex: win.index}"
               :key="`windows-${win.index}`">
               <div @mousedown="startDrag(win.index, $event)">
-                <v-system-bar class="system-bar" :id="`windows-${win.index}-drag`" :color="_.find(applications, (a) => a.name === win.application).color">
+                <v-system-bar :class="['system-bar', i < _.filter(windows, (a) => !a.minimized).length - 1 || win.application !== currentApp ? 'lighten-3' : '']" :id="`windows-${win.index}-drag`" :color="_.find(applications, (a) => a.name === win.application).color">
                   <v-toolbar-title>
                     {{win.application}}<span v-if="win.title">: {{win.title}}</span>
                   </v-toolbar-title>

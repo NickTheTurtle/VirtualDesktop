@@ -116,6 +116,25 @@ let app = new Vue({
       } else {
         this.currentApp = _.maxBy(this.windows, (a) => a.index).application;
       }
+    },
+    newWindow({
+      index = _.maxBy(this.windows, (a) => a.index).index + 1,
+      application,
+      title = "",
+      position = [0, 0],
+      size = [...this.maxSize],
+      minimized = false,
+      data = []
+    }) {
+      this.windows.push({
+        index,
+        application,
+        title,
+        position,
+        size,
+        minimized,
+        data
+      });
     }
   },
   mounted() {

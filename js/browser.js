@@ -19,7 +19,11 @@ let Browser = {
     name: "File",
     menu: [{
       name: "New Window",
-      action() {}
+      action() {
+        app.newWindow({
+          application: "Browser"
+        });
+      }
     }, {
       name: "Minimize Window",
       action() {

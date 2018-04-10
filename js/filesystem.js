@@ -20,7 +20,12 @@ let FileSystem = {
     name: "File",
     menu: [{
       name: "New Window",
-      action() {}
+      action() {
+        app.newWindow({
+          application: "File System",
+          title: "Documents"
+        });
+      }
     }, {
       name: "Minimize Window",
       action() {

@@ -28,10 +28,6 @@ body {
   background: rgba(0, 0, 0, 0.24);
 }
 
-.inactive-window {
-  opacity: 0.6;
-}
-
 #currentApp {
   -ms-user-select: none;
   -moz-user-select: none;
