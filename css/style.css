@@ -28,6 +28,10 @@ body {
   background: rgba(0, 0, 0, 0.24);
 }
 
+.menu__content {
+  z-index: 2147483647;
+}
+
 #currentApp {
   -ms-user-select: none;
   -moz-user-select: none;
