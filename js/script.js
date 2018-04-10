@@ -5,12 +5,12 @@ let windows = [{
   minimized: false,
   application: "File System",
   position: [0, 0],
-  size: [Infinity, Infinity]
+  size: [Infinity, Infinity],
+  title: "Documents"
 }];
 
 let data = {
   currentApp: "File System",
-  mini: true,
   drawer: true,
   applications,
   windows,
@@ -29,17 +29,35 @@ new Vue({
     switchApp(app) {
       this.currentApp = app;
       let application = _.find(this.applications, (a) => a.name === app);
-      if (application.open) {
-
+      let windows = _.filter(this.windows, (a) => a.application === app);
+      if (windows.length) {
+        let maxIndex = _.maxBy(this.windows, (a) => a.index).index;
+        let minIndex = _.maxBy(windows, (a) => -a.index).index;
+        for (let i = 0; i < windows.length; i++) {
+          windows[i].index += maxIndex - minIndex + 1;
+        }
       } else {
-        _.find(this.applications, (a) => a.name === app).open = true;
+        this.windows.push({
+          index: _.maxBy(this.windows, (a) => a.index).index + 1,
+          minimized: false,
+          application: app,
+          position: [0, 0],
+          size: [...this.maxSize],
+          title: ""
+        });
+      }
+    },
+    switchWindow(index) {
+      let maxIndex = _.maxBy(this.windows, (a) => a.index).index;
+      if (index !== maxIndex) {
+        _.find(this.windows, (a) => a.index === index).index = maxIndex + 1;
       }
     },
     resizeContent() {
       let content = $("#content > div");
       let container = $("#container");
       if (content && container) {
-        this.maxSize = [content.width() - parseInt(container.css("padding-left")) * 2, content.height() - parseInt(container.css("padding-top")) * 2];
+        this.maxSize = [content.width(), content.height() - parseInt(container.css("padding-top")) * 2];
         for (let i = 0; i < this.windows.length; i++) {
           this.windows[i].size = [Math.min(this.windows[i].size[0], this.maxSize[0]), Math.min(this.windows[i].size[1], this.maxSize[1])];
         }

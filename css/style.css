@@ -5,6 +5,7 @@ body {
 .windows {
   min-width: 200px;
   min-height: 100px;
+  position: absolute;
 }
 
 .system-bar {

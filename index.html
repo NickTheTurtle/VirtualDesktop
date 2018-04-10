@@ -14,15 +14,12 @@
   <div id="app" @mousemove="resizingDraggingWindow" @mouseup="stopResizeDrag">
     <v-app>
       <div>
-        <v-navigation-drawer id="drawer" stateless hide-overlay :mini-variant.sync="mini" v-model="drawer" fixed clipped app right>
+        <v-navigation-drawer id="drawer" stateless hide-overlay mini-variant v-model="drawer" fixed clipped app right>
           <v-list class="pt-0" dense>
-            <v-list-tile v-for="application in applications" @click="switchApp(application.name)" @click.native.stop="mini=true">
+            <v-list-tile v-for="application in applications" @click="switchApp(application.name)" v-ripple>
               <v-list-tile-action>
                 <v-icon large :title="application.name">{{application.icon}}</v-icon>
               </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>{{application.name}}</v-list-tile-title>
-              </v-list-tile-content>
             </v-list-tile>
           </v-list>
         </v-navigation-drawer>
@@ -43,16 +40,18 @@
           </v-menu>
         </v-toolbar-items>
         <v-spacer></v-spacer>
-        <v-btn id="menuToggler" @click.native.stop="mini = !mini" large icon>
+        <v-btn id="menuToggler" large icon>
           <v-icon large>apps</v-icon>
         </v-btn>
       </v-toolbar>
       <v-content id="content">
         <v-container id="container" fluid v-resize="resizeContent">
-          <div v-for="win in _.sortBy(windows, (a) => -a.index)">
-            <v-card class="windows" :id="`windows-${win.index}`" :width="win.size[0]" :height="win.size[1]" :style="{left: win.position[0] + 'px', top: win.position[1] + 'px', maxWidth: maxSize[0] + 'px', maxHeight: maxSize[1] + 'px'}">
+          <div v-for="win in _.sortBy(windows, (a) => -a.index)" @click="switchWindow(win.index)">
+            <v-card class="windows" :id="`windows-${win.index}`" :width="win.size[0]" :height="win.size[1]" :style="{left: win.position[0] + 'px', top: win.position[1] + $('#menubar').height() + 'px', maxWidth: maxSize[0] + 'px', maxHeight: maxSize[1] + 'px', zIndex: win.index}"
+              :key="`windows-${win.index}`">
               <div @mousedown="startDrag(win.index, $event)">
                 <v-system-bar class="system-bar" :id="`windows-${win.index}-drag`" :color="_.find(applications, (a) => a.name === win.application).color">
+                  {{win.application}}: {{win.title}}
                   <v-spacer></v-spacer>
                   <v-btn small flat icon>
                     <v-icon>remove</v-icon>
