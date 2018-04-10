@@ -58,10 +58,10 @@ new Vue({
     resizeContent() {
       let content = $("#content > div");
       let container = $("#container");
-      if (content && container) {
+      if (content && container && drawer) {
         this.maxSize = [content.width(), content.height() - parseInt(container.css("padding-top")) * 2];
         for (let i = 0; i < this.windows.length; i++) {
-          this.windows[i].size = [Math.min(this.windows[i].size[0], this.maxSize[0]), Math.min(this.windows[i].size[1], this.maxSize[1])];
+          this.windows[i].size = [Math.min(this.windows[i].size[0], this.maxSize[0] - this.windows[i].position[0]), Math.min(this.windows[i].size[1], this.maxSize[1] - this.windows[i].position[1])];
         }
       }
     },
