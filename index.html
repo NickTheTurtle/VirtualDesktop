@@ -16,7 +16,7 @@
       <div>
         <v-navigation-drawer id="drawer" stateless hide-overlay mini-variant v-model="drawer" fixed clipped app right>
           <v-list class="pt-0" dense>
-            <v-list-tile v-for="application in applications" @click="switchApp(application.name)" v-ripple>
+            <v-list-tile :class="application.name === currentApp ? 'active' : ''" v-for="application in applications" @click="switchApp(application.name)" v-ripple>
               <v-list-tile-action>
                 <v-icon large :title="application.name">{{application.icon}}</v-icon>
               </v-list-tile-action>
@@ -33,7 +33,9 @@
             </v-btn>
             <v-list>
               <template v-for="item in menu.menu">
-                <v-list-tile @click="item.action" v-if="!item.divider">{{item.name}}</v-list-tile>
+                <v-list-tile @click="item.action" v-if="!item.divider" v-ripple>
+                  <v-list-tile-action>{{item.name}}</v-list-tile-action>
+                </v-list-tile>
                 <v-divider v-else></v-divider>
               </template>
             </v-list>
@@ -46,7 +48,7 @@
       </v-toolbar>
       <v-content id="content">
         <v-container id="container" fluid v-resize="resizeContent">
-          <div v-for="win in _.sortBy(windows, (a) => -a.index)" @click="switchWindow(win.index)">
+          <div :class="i > 0 || win.application !== currentApp ? 'inactive-window' : ''" v-for="(win, i) in _.sortBy(_.filter(windows, (a) => !a.minimized), (a) => -a.index)" @click="switchWindow(win.index)">
             <v-card class="windows" :id="`windows-${win.index}`" :width="win.size[0]" :height="win.size[1]" :style="{left: win.position[0] + 'px', top: win.position[1] + $('#menubar').height() + 'px', maxWidth: maxSize[0] + 'px', maxHeight: maxSize[1] + 'px', zIndex: win.index}"
               :key="`windows-${win.index}`">
               <div @mousedown="startDrag(win.index, $event)">
@@ -55,13 +57,13 @@
                     {{win.application}}<span v-if="win.title">: {{win.title}}</span>
                   </v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-btn small flat icon>
+                  <v-btn small flat icon @click.stop="minimizeWindow(win.index)">
                     <v-icon>remove</v-icon>
                   </v-btn>
-                  <v-btn small flat icon>
+                  <v-btn small flat icon @click.stop="maximizeWindow(win.index)">
                     <v-icon>check_box_outline_blank</v-icon>
                   </v-btn>
-                  <v-btn small flat icon>
+                  <v-btn small flat icon @click.stop="closeWindow(win.index)">
                     <v-icon>close</v-icon>
                   </v-btn>
                 </v-system-bar>

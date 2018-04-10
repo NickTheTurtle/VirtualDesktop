@@ -23,13 +23,19 @@ let FileSystem = {
       action() {}
     }, {
       name: "Minimize Window",
-      action() {}
+      action() {
+        app.minimizeWindow(_.maxBy(data.windows, (a) => a.index).index);
+      }
     }, {
       name: "Maximize Window",
-      action() {}
+      action() {
+        app.maximizeWindow(_.maxBy(data.windows, (a) => a.index).index);
+      }
     }, {
       name: "Close Window",
-      action() {}
+      action() {
+        app.closeWindow(_.maxBy(data.windows, (a) => a.index).index);
+      }
     }, {
       divider: true
     }, {

@@ -22,7 +22,7 @@ let data = {
 
 let dragResizeWindow;
 
-new Vue({
+let app = new Vue({
   el: '#app',
   data,
   methods: {
@@ -35,10 +35,11 @@ new Vue({
         let minIndex = _.maxBy(windows, (a) => -a.index).index;
         for (let i = 0; i < windows.length; i++) {
           windows[i].index += maxIndex - minIndex + 1;
+          windows[i].minimized = false;
         }
         return maxIndex - minIndex + 1;
       } else {
-        let index = _.maxBy(this.windows, (a) => a.index).index + 1;
+        let index = this.windows.length ? _.maxBy(this.windows, (a) => a.index).index + 1 : 0;
         this.windows.push({
           index,
           minimized: false,
@@ -55,6 +56,7 @@ new Vue({
       let win = _.find(this.windows, (a) => a.index === index);
       if (index !== maxIndex) {
         win.index = maxIndex + 1;
+        win.minimized = false;
         this.currentApp = win.application;
         return maxIndex + 1;
       }
@@ -97,6 +99,22 @@ new Vue({
         this.dragWindowIndex = index;
         this.dragInitialCoord = [event.clientX - win.position[0], event.clientY - win.position[1]];
         dragResizeWindow = _.find(this.windows, (a) => a.index === index);
+      }
+    },
+    minimizeWindow(index) {
+      _.find(this.windows, (a) => a.index === index).minimized = true;
+    },
+    maximizeWindow(index) {
+      let win = _.find(this.windows, (a) => a.index === index);
+      win.position = [0, 0];
+      win.size = [...this.maxSize];
+    },
+    closeWindow(index) {
+      this.windows = _.filter(this.windows, (a) => a.index !== index);
+      if (!this.windows.length) {
+        this.currentApp = "File System";
+      } else {
+        this.currentApp = _.maxBy(this.windows, (a) => a.index).application;
       }
     }
   },
