@@ -25,10 +25,11 @@ body {
 }
 
 .active {
-  background: rgba(0, 0, 0, 0.24);
+  background: rgba(0, 0, 0, 0.36);
 }
 
 .menu__content {
+  overflow: scroll;
   min-width: 170px!important;
   z-index: 2147483647!important;
 }

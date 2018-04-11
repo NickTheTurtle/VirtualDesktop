@@ -54,9 +54,9 @@ let app = new Vue({
     switchWindow(index) {
       let maxIndex = _.maxBy(this.windows, (a) => a.index).index;
       let win = _.find(this.windows, (a) => a.index === index);
+      win.minimized = false;
       if (index !== maxIndex) {
         win.index = maxIndex + 1;
-        win.minimized = false;
         this.currentApp = win.application;
         return maxIndex + 1;
       }
