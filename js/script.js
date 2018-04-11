@@ -118,7 +118,7 @@ let app = new Vue({
       }
     },
     newWindow({
-      index = _.maxBy(this.windows, (a) => a.index).index + 1,
+      index = this.windows.length ? _.maxBy(this.windows, (a) => a.index).index + 1 : 0,
       application,
       title = "",
       position = [0, 0],
